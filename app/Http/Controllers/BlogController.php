@@ -1,14 +1,10 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Blog;
 use Illuminate\Http\Request;
-
 class BlogController extends Controller
 {
    
-
     /**
      * Display a listing of the resource.
      *
@@ -16,12 +12,11 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $blogs = Blog::paginate(1);
+        $blogs = Blog::paginate(5);
         //dd($blogs);
         // dalam folder index.blade.php    
         return view('blogs.index')->with(compact('blogs'));
     }
-
     /**
      * Show the form for creating a new resource.
      *
@@ -31,7 +26,6 @@ class BlogController extends Controller
     {
         return view('blogs.create');
     }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -42,14 +36,12 @@ class BlogController extends Controller
     {
         //dd($request);
         //Method 1
-        $blog =  new Blog();
-        $blog->title = $request->get('title');
-        $blog->body = $request->get('body');
-        $blog->save();
-
+        // $blog =  new Blog();
+        // $blog->title = $request->get('title');
+        // $blog->body = $request->get('body');
+        // $blog->save();
         //Method 2 - Mass assignable
        //$blog = Blog::create($request->only('title', 'body'));
-
         //Method 1
         // $user = auth()->user();
         // $blog->user()->associate($user);
@@ -57,11 +49,9 @@ class BlogController extends Controller
         //Method 2
         $user = auth()->user();
         $user->blogs()->create($request->only('title','body'));
-
         //return view('blogs.index')
         return redirect()->route('blog:index')->with(['alert-type' => 'alert-success','alert'=> 'Your blog saved']);
     }
-
     /**
      * Display the specified resource.
      *
@@ -72,7 +62,6 @@ class BlogController extends Controller
     {
         return view('blogs.show')->with(compact('blog'));
     }
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -83,7 +72,6 @@ class BlogController extends Controller
     {
         return view('blogs.edit')->with(compact('blog'));
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -94,10 +82,8 @@ class BlogController extends Controller
     public function update(Request $request, Blog $blog)
     {
         $blog = $blog->update($request->only('title', 'body'));
-
         return redirect()->route('blog:index')->with(['alert-type' => 'alert-success', 'alert' => "Your blog updated"]);
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -108,6 +94,5 @@ class BlogController extends Controller
     {
         $blog->delete();
         return redirect()->route('blog:index')->with(['alert-type' => 'alert-danger', 'alert' => "Your blog deleted"]);
-
     }
 }
